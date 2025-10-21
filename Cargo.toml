@@ -1,0 +1,23 @@
+[package]
+name = "celestia-recursion"
+version = "0.1.0"
+edition = "2024"
+
+[[bin]]
+name = "scraper"
+path = "src/bin/scraper.rs"
+
+[[bin]]
+name = "prover"
+path = "src/bin/prover.rs"
+
+[dependencies]
+tendermint-light-client-verifier = { version = "0.35.0", default-features = false, features = ["rust-crypto"] }
+serde_json = { version = "1.0", default-features = false, features = ["alloc", "std"] }
+serde = { version = "1.0", default-features = false, features = ["derive", "std"] }
+serde_cbor = "0.11.2"
+reqwest = { version = "0.11", features = ["json"] }
+tendermint = { version = "0.35.0", default-features = false }
+subtle-encoding = "0.5.1"
+clap = { version = "4.5.50", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
