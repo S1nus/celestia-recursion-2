@@ -91,7 +91,7 @@ async fn main() {
 
 /// Saves a LightBlock to a JSON file
 fn save_light_block(block: &LightBlock, height: u64, output_path: &PathBuf) {
-    let filename = format!("block_{:03}.json", height);
+    let filename = format!("block_{}.json", height);
     let filepath = output_path.join(filename);
 
     let json = serde_json::to_string_pretty(block).expect("Failed to serialize LightBlock");
