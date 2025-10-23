@@ -1,0 +1,12 @@
+/Users/connorohara/celestia-recursion/target/debug/deps/serde-26edce52897b2888.d: /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/connorohara/celestia-recursion/target/debug/build/serde-87d412d6a642820b/out/private.rs
+
+/Users/connorohara/celestia-recursion/target/debug/deps/libserde-26edce52897b2888.rmeta: /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/connorohara/celestia-recursion/target/debug/build/serde-87d412d6a642820b/out/private.rs
+
+/Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/connorohara/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/connorohara/celestia-recursion/target/debug/build/serde-87d412d6a642820b/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/connorohara/celestia-recursion/target/debug/build/serde-87d412d6a642820b/out
