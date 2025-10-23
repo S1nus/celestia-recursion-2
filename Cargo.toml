@@ -2,7 +2,8 @@
 members = [
     "program-verify-consensus-recursion",
     "runner-verify-consensus-recursion",
-    "scraper"
+    "scraper",
+    "common"
 ]
 resolver = "2"
 default-members = ["scraper"]
