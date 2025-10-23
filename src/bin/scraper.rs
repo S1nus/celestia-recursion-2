@@ -7,6 +7,8 @@ use tendermint_light_client_verifier::{
     options::Options, types::LightBlock, ProdVerifier, Verdict, Verifier,
 };
 
+use celestia_recursion::tm_rpc_utils::TendermintRPCClient;
+
 /// Celestia header scraper
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -28,7 +30,7 @@ async fn main() {
     println!("Headers will be stored in: {:?}", args.output_path);
     println!("Using RPC URL: {}", args.rpc_url);
     
-    let client = celestia_recursion::tm_rpc_utils::TendermintRPCClient::new(args.rpc_url);
+    let client = TendermintRPCClient::new(args.rpc_url);
 
     let peer_id = client.fetch_peer_id().await.unwrap();
     
@@ -49,7 +51,7 @@ async fn main() {
     fs::create_dir_all(&args.output_path).expect("Failed to create output directory");
 
     // Fetch genesis block (height 1) as our initial trusted block
-    println!("Fetching genesis block (height 1)...");
+    println!("Fetching genesis header...");
     let genesis_block = client.fetch_light_block(start, peer_id).await.unwrap();
     save_light_block(&genesis_block, start, &args.output_path);
 
@@ -118,7 +120,15 @@ async fn find_next_verifiable_block(
     // First, try to verify directly to the end
     println!("Attempting to verify from {} to {}...", trusted_block.height().value(), end_height);
 
-    match try_verify(client, verifier, options, trusted_block, end_height, peer_id).await {
+    let target_block = match client.fetch_light_block(end_height, peer_id).await {
+        Ok(block) => block,
+        Err(e) => {
+            println!("✗ Error fetching block at height {}: {}", end_height, e);
+            return None;
+        }
+    };
+
+    match try_verify(verifier, options, trusted_block, &target_block).await {
         Ok(true) => {
             println!("✓ Successfully verified jump to {}", end_height);
             return Some(end_height);
@@ -141,7 +151,19 @@ async fn find_next_verifiable_block(
 
         println!("Binary search: trying height {} (range: {} to {})", mid, left, right);
 
-        match try_verify(client, verifier, options, trusted_block, mid, peer_id).await {
+        let target_block = match client.fetch_light_block(mid, peer_id).await {
+            Ok(block) => block,
+            Err(e) => {
+                println!("✗ Error fetching block at height {}: {}", mid, e);
+                if mid == 0 {
+                    break;
+                }
+                right = mid - 1;
+                continue;
+            }
+        };
+
+        match try_verify(verifier, options, trusted_block, &target_block).await {
             Ok(true) => {
                 println!("✓ Successfully verified jump to {}", mid);
                 best_verifiable = Some(mid);
@@ -157,7 +179,7 @@ async fn find_next_verifiable_block(
                 right = mid - 1;
             }
             Err(e) => {
-                println!("✗ Error verifying jump to {}: {}", mid, e);
+                println!("✗ ERROR!!! verifying jump to {}: {}", mid, e);
                 if mid == 0 {
                     break;
                 }
@@ -171,15 +193,11 @@ async fn find_next_verifiable_block(
 
 /// Attempts to verify a target block against a trusted block
 async fn try_verify(
-    client: &celestia_recursion::tm_rpc_utils::TendermintRPCClient,
     verifier: &ProdVerifier,
     options: &Options,
     trusted_block: &LightBlock,
-    target_height: u64,
-    peer_id: [u8; 20],
+    target_block: &LightBlock,
 ) -> Result<bool, Box<dyn std::error::Error>> {
-    // Fetch the target block
-    let target_block = client.fetch_light_block(target_height, peer_id).await?;
 
     // Get verification time (target block time + some buffer)
     let verify_time = (target_block.time() + Duration::from_secs(20))
